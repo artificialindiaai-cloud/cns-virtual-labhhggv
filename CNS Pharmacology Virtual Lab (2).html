@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CNS Pharmacology Virtual Lab</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f1f4fc;--card:#fff;--line:#d6dcf0;--tx:#0e1838;--mut:#55648f;--a:#0d9488;--b:#7c3aed;--c:#ea580c;--r:#dc2626;--g:#16a34a;--am:#d97706}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#060a17;--card:#0e1528;--line:#1e2a4a;--tx:#e8edff;--mut:#8f9bc2;--a:#5eead4;--b:#a78bfa;--c:#fb923c;--r:#f87171;--g:#4ade80;--am:#fbbf24}}
+:root[data-theme="dark"]{--bg:#060a17;--card:#0e1528;--line:#1e2a4a;--tx:#e8edff;--mut:#8f9bc2;--a:#5eead4;--b:#a78bfa;--c:#fb923c;--r:#f87171;--g:#4ade80;--am:#fbbf24}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.hero{position:relative;overflow:hidden;padding:48px 20px 28px;text-align:center}
+.orb{position:absolute;width:340px;height:340px;border-radius:50%;filter:blur(70px);opacity:.35;background:radial-gradient(circle,var(--b),transparent 70%);top:-120px;left:50%;margin-left:-170px;animation:fl 8s ease-in-out infinite alternate}
+@keyframes fl{to{transform:translate(60px,40px) scale(1.2);opacity:.5}}
+.eyebrow{position:relative;letter-spacing:.2em;font-size:12px;color:var(--a);font-weight:700;margin:0}
+h1{position:relative;font-size:clamp(30px,7vw,52px);line-height:1.1;margin:8px 0 10px}
+h1 span{background:linear-gradient(90deg,var(--a),var(--b),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{position:relative;max-width:620px;margin:0 auto;color:var(--mut)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:8px;overflow-x:auto;padding:10px 16px;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px)}
+nav button{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--tx);padding:9px 16px;border-radius:99px;font:600 14px inherit;cursor:pointer;transition:.2s}
+nav button.on{background:linear-gradient(90deg,var(--b),var(--a));color:#fff;border-color:transparent;transform:translateY(-1px)}
+main{max-width:860px;margin:0 auto;padding:12px 16px 40px}
+section[hidden]{display:none}
+h2{margin:14px 0 4px;font-size:24px}
+.lead{color:var(--mut);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;box-shadow:0 10px 40px -20px rgba(80,60,200,.35)}
+canvas,svg.ch{width:100%;display:block;border-radius:12px}
+canvas{aspect-ratio:700/360}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.seg button,.btn{border:1px solid var(--line);background:transparent;color:var(--tx);padding:9px 14px;border-radius:12px;font:600 14px inherit;cursor:pointer}
+.seg button.on{background:var(--b);color:#fff;border-color:var(--b)}
+.btn{background:var(--a);color:#06231f;border:0}
+label{font-size:14px;color:var(--mut);display:block}
+input[type=range]{width:100%;accent-color:var(--b);height:28px}
+select{padding:8px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--tx);font-size:14px}
+.ctl{flex:1 1 220px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:8px 0}
+.st{border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.st b{display:block;font-size:22px}.st small{color:var(--mut)}
+.bar{height:10px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--r),var(--g));transition:width .2s}
+.msg{border-left:4px solid var(--b);background:color-mix(in srgb,var(--b) 10%,transparent);padding:10px 14px;border-radius:0 12px 12px 0;margin:10px 0}
+.pearl{border-left-color:var(--c);background:color-mix(in srgb,var(--c) 10%,transparent)}
+.lg{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--mut)}.lg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+.gl{stroke:var(--line)}.tk{fill:var(--mut);font-size:11px}.tt{fill:var(--tx);font-size:12px;font-weight:600}
+.badge{display:inline-block;padding:4px 12px;border-radius:99px;font-weight:700;color:#fff}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:20px}
+</style></head><body>
+<header class="hero"><div class="orb"></div>
+<p class="eyebrow">VIRTUAL PHARMACOLOGY LAB</p>
+<h1>CNS Pharmacology, <span>in motion</span></h1>
+</header>
+<nav id="nav"><button class="on" data-t="s1">🧬 GABA-A receptor</button><button data-t="s2">📈 Dose–response</button><button data-t="s3">💊 Phenytoin kinetics</button><button data-t="s4">⚡ Levodopa on–off</button><button data-t="s5">🔄 3D receptor</button></nav>
+<main>
+<section id="s1"><h2>Benzodiazepines vs Barbiturates at GABA-A</h2><p class="lead">Pick a drug, move the dose, and watch the chloride channel.</p>
+<div class="card"><canvas id="gc"></canvas>
+<div class="lg"><span><i style="background:#4ade80"></i>Cl⁻ ion</span><span><i style="background:#facc15"></i>GABA</span><span><i style="background:#60a5fa"></i>Benzodiazepine</span><span><i style="background:#fb923c"></i>Barbiturate</span></div>
+<div class="row seg" id="mode"><button class="on" data-m="gaba">GABA only</button><button data-m="benzo">Benzodiazepine</button><button data-m="barb">Barbiturate</button></div>
+<div class="row"><div class="ctl"><label>Drug dose: <b id="dv">70</b>%</label><input id="dose" type="range" min="0" max="100" value="70"></div>
+<div class="ctl"><label><input id="gaba" type="checkbox" checked> GABA present (tick/untick to test)</label></div></div>
+<div class="stats"><div class="st"><b id="cl">0</b><small>Cl⁻ entered</small></div><div class="st"><b id="occ">0%</b><small>Channel open time</small></div><div class="st"><b id="mv">-70 mV</b><small>Membrane potential</small></div><div class="st"><small>Neuron excitability</small><div class="bar"><i id="exb" style="width:100%"></i></div></div></div>
+<div class="msg" id="cap"></div></div>
+<div class="msg pearl"><b>Exam pearl:</b> Benzodiazepines ↑ <u>frequency</u> of opening (need GABA, so a ceiling). Barbiturates ↑ <u>duration</u> and, at high dose, open the channel directly (no ceiling, so more dangerous in overdose).</div></section>
+
+<section id="s2" hidden><h2>Dose–response &amp; the ceiling effect</h2><p class="lead">Escalate the dose and compare how deep CNS depression goes.</p>
+<div class="card"><svg id="drs" class="ch" viewBox="0 0 700 360"></svg>
+<div class="row"><div class="ctl"><label>Dose (log scale, arbitrary units): <b id="d2v">40</b></label><input id="d2" type="range" min="0" max="100" value="40"></div><button class="btn" id="play2">▶ Auto-escalate</button></div>
+<div class="stats"><div class="st"><small style="color:var(--b)">● Benzodiazepine</small><b id="rb" style="font-size:17px"></b></div><div class="st"><small style="color:var(--c)">● Barbiturate</small><b id="rr" style="font-size:17px"></b></div></div></div>
+<div class="msg pearl"><b>Pearl:</b> Benzodiazepine curve flattens at hypnosis, so a wide safety margin. Barbiturate curve keeps climbing to coma and respiratory failure.</div></section>
+
+<section id="s3" hidden><h2>Phenytoin: saturation (non-linear) kinetics</h2><p class="lead">Small dose changes can cause huge jumps in plasma level. Illustrative values: Vmax 500 mg/day, Km 4 mg/L.</p>
+<div class="card"><svg id="phs" class="ch" viewBox="0 0 700 360"></svg>
+<div class="row"><div class="ctl"><label>Daily dose: <b id="pdv">300</b> mg/day</label><input id="pd" type="range" min="0" max="470" step="10" value="300"></div></div>
+<div class="stats"><div class="st"><b id="pc">–</b><small>Steady-state level (mg/L)</small></div><div class="st"><b id="pz" style="font-size:17px">–</b><small>Zone</small></div></div>
+<div class="msg" id="pj"></div></div>
+<div class="msg pearl"><b>Pearl:</b> Css = Km·R / (Vmax − R). Near Vmax, the enzyme is saturated, so t½ lengthens and dose increases must be made in small steps with level monitoring.</div></section>
+
+<section id="s4" hidden><h2>Levodopa: the On–Off phenomenon</h2><p class="lead">As Parkinson's advances, the therapeutic window narrows. Watch the 24-hour day.</p>
+<div class="card"><svg id="lvs" class="ch" viewBox="0 0 700 360"></svg>
+<div class="row"><div class="ctl"><label>Years of disease/treatment: <b id="lsv">0</b></label><input id="ls" type="range" min="0" max="10" value="0"></div>
+<div class="ctl"><label>Dose interval</label><select id="li"><option value="3">Every 3 h</option><option value="4" selected>Every 4 h</option><option value="6">Every 6 h</option></select></div></div>
+<div class="stats"><div class="st"><small>Right now</small><br><span class="badge" id="lst">–</span></div><div class="st"><b id="on" style="color:var(--g)">–</b><small>Time ON</small></div><div class="st"><b id="off" style="color:var(--r)">–</b><small>Time OFF</small></div><div class="st"><b id="dy" style="color:var(--am)">–</b><small>Dyskinesia</small></div></div></div>
+<div class="msg pearl"><b>Pearl:</b> Early on, striatal storage buffers the drug. Later, clinical state tracks plasma level: wearing-off (OFF between doses) and peak-dose dyskinesia. Remedies: smaller, more frequent doses; COMT/MAO-B inhibitors; dopamine agonists.</div></section>
+<section id='s5' hidden><h2>GABA-A receptor in 3D (360°)</h2><p class='lead'>Drag to spin it in any direction. Tap Top view to look straight down the chloride pore.</p><div class='card'><div id='tw' style='aspect-ratio:16/11;border-radius:12px;overflow:hidden;background:radial-gradient(circle at 50% 30%,#1e2a5a,#060a17)'></div><div class='row seg'><button id='vtop'>⬇ Top view</button><button id='vside'>↔ Side view</button><button id='vauto' class='on'>⟳ Auto-rotate</button></div><div class='row'><label><input id='t3o' type='checkbox' checked> Channel open</label><label><input id='t3g' type='checkbox' checked> GABA</label><label><input id='t3b' type='checkbox' checked> Benzodiazepine</label><label><input id='t3r' type='checkbox' checked> Barbiturate</label></div><div class='lg'><span><i style='background:#8b5cf6'></i>α subunit (×2)</span><span><i style='background:#14b8a6'></i>β subunit (×2)</span><span><i style='background:#94a3b8'></i>γ subunit</span><span><i style='background:#4ade80'></i>Cl⁻</span></div></div><div class='msg pearl'><b>Pearl:</b> GABA-A is a pentamer (2α, 2β, 1γ). GABA binds the β/α interfaces. Benzodiazepines bind the α/γ interface, so they need a γ subunit. Barbiturates bind inside the transmembrane region of the β subunits.</div></section>
+</main>
+<footer>For educational use only. Values are illustrative.</footer>
+<script>
+const $=s=>document.querySelector(s),V=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x==b));document.querySelectorAll('section').forEach(s=>s.hidden=s.id!=b.dataset.t)});
+function axes(yl,xl,yt,ymax,Yf){let s='';for(let i=0;i<=yt;i++){const v=+(ymax*i/yt).toFixed(2),y=Yf(v);s+=`<line x1="50" x2="680" y1="${y}" y2="${y}" class="gl"/><text x="44" y="${y+4}" class="tk" text-anchor="end">${v}</text>`}
+return s+`<text x="365" y="352" class="tk" text-anchor="middle">${xl}</text><text transform="translate(12 170) rotate(-90)" class="tk" text-anchor="middle">${yl}</text>`}
+/* ---------- GABA-A canvas ---------- */
+const C=$('#gc'),x=C.getContext('2d');let mode='gaba';
+const caps={gaba:'GABA alone: the channel opens only occasionally and briefly, so a small Cl⁻ inflow.',benzo:'Benzodiazepine binds the α/γ interface and ↑ FREQUENCY of opening. It needs GABA: untick GABA and nothing happens (ceiling effect).',barb:'Barbiturate binds a transmembrane site and ↑ DURATION of opening. At high dose it opens the channel even without GABA (no ceiling).'};
+$('#cap').textContent=caps.gaba;
+document.querySelectorAll('#mode button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;document.querySelectorAll('#mode button').forEach(y=>y.classList.toggle('on',y==b));$('#cap').textContent=caps[mode]});
+$('#dose').oninput=e=>$('#dv').textContent=e.target.value;
+const g={t:0,open:false,tn:1,tc:0,gate:0,ions:[],cl:0,sig:0,occ:0};
+const P=()=>{const d=+$('#dose').value/100;if(mode=='gaba')return{i:2.6,d:.7};if(mode=='benzo')return{i:2.6/(1+3*d),d:.7};return{i:2.6,d:.7*(1+4*d),direct:d>.8}};
+function step(dt){const p=P(),gb=$('#gaba').checked;g.t+=dt;
+if(p.direct)g.open=true;else if(!gb)g.open=false;
+else if(g.open){if(g.t>=g.tc){g.open=false;g.tn=g.t+p.i*(.8+Math.random()*.4)}}
+else if(g.t>=g.tn){g.open=true;g.tc=g.t+p.d}
+g.gate+=((g.open?1:0)-g.gate)*Math.min(1,dt*14);g.occ+=((g.open?1:0)-g.occ)*dt*.25;g.sig=Math.max(0,g.sig-dt*.05);
+if(g.ions.filter(i=>!i.in).length<32)g.ions.push({x:20+Math.random()*660,y:15+Math.random()*95,vx:0,vy:0,a:1});
+for(const i of g.ions){i.vx+=(Math.random()-.5)*.6;i.vy+=(Math.random()-.5)*.6;i.vx*=.95;i.vy*=.95;
+if(!i.in){if(g.open&&i.y>50&&i.y<124&&Math.abs(i.x-350)<130){i.vx+=(350-i.x)*.004;i.vy+=.07}
+i.x+=i.vx;i.y+=i.vy;const inP=Math.abs(i.x-350)<12&&g.gate>.6;
+if(i.y>124&&i.y<=240){if(inP||i.ch){i.ch=1;i.x+=(350-i.x)*.25;i.y+=1.6}else{i.y=124;i.vy=-Math.abs(i.vy)}}
+if(i.y>240&&!i.in){i.in=1;g.cl++;g.sig=Math.min(1,g.sig+.05)}
+if(i.x<8||i.x>692)i.vx*=-1;if(i.y<8)i.vy=Math.abs(i.vy)}
+else{i.x+=i.vx;i.y+=i.vy;i.a-=dt*.45;if(i.y<250)i.vy=Math.abs(i.vy);if(i.y>350)i.vy=-Math.abs(i.vy)}}
+g.ions=g.ions.filter(i=>i.a>0);
+$('#cl').textContent=g.cl;$('#occ').textContent=Math.round(g.occ*100)+'%';$('#mv').textContent=(-70-15*g.sig).toFixed(1)+' mV';$('#exb').style.width=(100-g.sig*70)+'%'}
+function sub(x0,x1,l,col){x.fillStyle=col;x.beginPath();x.roundRect(x0,96,x1-x0,166,10);x.fill();x.fillStyle='#fff';x.font='bold 16px system-ui';x.textAlign='center';x.fillText(l,(x0+x1)/2,186)}
+function draw(){const s=C.width/700;x.setTransform(s,0,0,s,0,0);x.clearRect(0,0,700,360);
+x.fillStyle=V('--line');x.globalAlpha=.25;x.fillRect(0,0,700,130);x.globalAlpha=.1;x.fillRect(0,240,700,120);x.globalAlpha=1;
+const gr=x.createLinearGradient(0,130,0,240);gr.addColorStop(0,'#f59e0b55');gr.addColorStop(.5,'#f59e0b18');gr.addColorStop(1,'#f59e0b55');x.fillStyle=gr;x.fillRect(0,130,700,110);
+x.fillStyle='#f59e0b';for(let k=6;k<700;k+=14){x.beginPath();x.arc(k,134,4.5,0,7);x.arc(k,236,4.5,0,7);x.fill()}
+x.fillStyle=V('--mut');x.font='11px system-ui';x.textAlign='left';x.fillText('EXTRACELLULAR',10,22);x.fillText('INTRACELLULAR (neuron)',10,350);x.fillText('Lipid bilayer',10,188);
+const [c1,c2,c3]=['#7c3aed','#0d9488','#2563eb'];sub(244,290,'γ','#64748b');sub(292,338,'α',c1);sub(362,408,'β',c2);sub(410,456,'α',c1);
+const gp=4+g.gate*22;x.fillStyle='#475569';x.fillRect(338,168,(24-gp)/2+0,28);x.fillRect(362-(24-gp)/2,168,(24-gp)/2,28);
+x.fillStyle=V('--mut');x.fillText('pore',336,282);
+if($('#gaba').checked){x.fillStyle='#facc15';[[409,112],[291,250]].slice(0,1).forEach(q=>{x.beginPath();x.arc(q[0],q[1]-(g.open?0:6),9,0,7);x.fill();x.fillStyle='#000';x.font='bold 7px system-ui';x.fillText('GABA',q[0],q[1]+2-(g.open?0:6));x.fillStyle='#facc15'})}
+const d=+$('#dose').value;if(mode=='benzo'&&d>0){x.fillStyle='#60a5fa';x.save();x.translate(291,112);x.rotate(.78);x.fillRect(-9,-9,18,18);x.restore()}
+if(mode=='barb'&&d>0){x.fillStyle='#fb923c';x.beginPath();for(let k=0;k<6;k++)x.lineTo(410+11*Math.cos(k*1.047),185+11*Math.sin(k*1.047));x.fill()}
+for(const i of g.ions){x.globalAlpha=Math.max(0,i.a);x.fillStyle='#4ade80';x.beginPath();x.arc(i.x,i.y,6,0,7);x.fill();x.fillStyle='#052e16';x.font='bold 8px system-ui';x.textAlign='center';x.fillText('Cl⁻',i.x,i.y+3)}x.globalAlpha=1}
+let last=performance.now();function loop(n){const dt=Math.min(.05,(n-last)/1000);last=n;if(!$('#s1').hidden){const d=devicePixelRatio||1,r=C.getBoundingClientRect();if(C.width!=Math.round(r.width*d)){C.width=Math.round(r.width*d);C.height=Math.round(r.height*d)}step(dt);draw()}requestAnimationFrame(loop)}requestAnimationFrame(loop);
+/* ---------- Dose-response ---------- */
+const eB=d=>38/(1+Math.exp(-(d-35)/8)),eR=d=>100/(1+Math.exp(-(d-62)/9)),X1=d=>50+d*6.3,Y1=e=>320-e*3;
+const stg=e=>e<20?'Sedation / anxiolysis':e<40?'Hypnosis (sleep)':e<70?'Surgical anaesthesia':e<90?'Coma':'Respiratory failure';
+{let pb='',pr='',bd='';for(let d=0;d<=100;d++){pb+=X1(d)+','+Y1(eB(d))+' ';pr+=X1(d)+','+Y1(eR(d))+' '}
+[[0,20,'Sedation'],[20,40,'Hypnosis'],[40,70,'Anaesthesia'],[70,90,'Coma'],[90,100,'Respiratory failure']].forEach((b,i)=>bd+=`<rect x="50" y="${Y1(b[1])}" width="630" height="${(b[1]-b[0])*3}" fill="${i==4?V('--r'):V('--b')}" opacity="${i==4?.18:i%2?.05:.1}"/><text x="684" y="${Y1((b[0]+b[1])/2)+4}" class="tk" text-anchor="end" style="font-size:10px">${b[2]}</text>`);
+$('#drs').innerHTML=bd+axes('CNS depression (%)','Dose →',5,100,e=>Y1(e))+`<polyline points="${pb}" fill="none" stroke="${V('--b')}" stroke-width="4" stroke-linecap="round"/><polyline points="${pr}" fill="none" stroke="${V('--c')}" stroke-width="4" stroke-linecap="round"/><text x="${X1(80)}" y="${Y1(38)-8}" class="tt" text-anchor="middle">CEILING</text><line id="kl" y1="20" y2="320" stroke="${V('--tx')}" stroke-dasharray="4"/><circle id="kb" r="8" fill="${V('--b')}"/><circle id="kr" r="8" fill="${V('--c')}"/>`}
+function up2(){const d=+$('#d2').value;$('#d2v').textContent=d;$('#kl').setAttribute('x1',X1(d));$('#kl').setAttribute('x2',X1(d));[['kb',eB],['kr',eR]].forEach(([k,f])=>{$('#'+k).setAttribute('cx',X1(d));$('#'+k).setAttribute('cy',Y1(f(d)))});$('#rb').textContent=stg(eB(d));$('#rr').textContent=stg(eR(d))}
+$('#d2').oninput=up2;up2();let tm;$('#play2').onclick=()=>{clearInterval(tm);$('#d2').value=0;tm=setInterval(()=>{const v=+$('#d2').value+1;$('#d2').value=v;up2();if(v>=100)clearInterval(tm)},70)};
+/* ---------- Phenytoin ---------- */
+const Km=4,Vm=500,css=R=>Km*R/(Vm-R),X3=R=>50+R*1.26,Y3=c=>320-c*6;
+{let pc='';for(let R=0;R<=470;R+=2){const c=css(R);if(c>50)break;pc+=X3(R)+','+Y3(c)+' '}
+$('#phs').innerHTML=`<rect x="50" y="${Y3(20)}" width="630" height="${60}" fill="${V('--g')}" opacity=".15"/><text x="676" y="${Y3(15)+4}" class="tt" text-anchor="end">Therapeutic 10–20</text>`+axes('Plasma level (mg/L)','Daily dose (mg/day) →',5,50,Y3)+`<line x1="${X3(0)}" y1="${Y3(0)}" x2="${X3(470)}" y2="${Y3(Km/Vm*470)}" stroke="${V('--mut')}" stroke-dasharray="6"/><text x="${X3(380)}" y="${Y3(3.5)-8}" class="tk">if kinetics were linear</text><polyline points="${pc}" fill="none" stroke="${V('--c')}" stroke-width="4" stroke-linecap="round"/><line id="pl" y1="20" y2="320" stroke="${V('--tx')}" stroke-dasharray="4"/><circle id="pk" r="9" fill="${V('--b')}"/>`}
+function up3(){const R=+$('#pd').value,c=css(R),c2=css(R+30);$('#pdv').textContent=R;$('#pl').setAttribute('x1',X3(R));$('#pl').setAttribute('x2',X3(R));$('#pk').setAttribute('cx',X3(R));$('#pk').setAttribute('cy',Y3(Math.min(c,50)));
+$('#pc').textContent=R?c.toFixed(1):'0';$('#pz').textContent=c<10?'Sub-therapeutic':c<=20?'Therapeutic ✔':c<30?'Toxic: nystagmus':c<40?'Toxic: ataxia':'Severe toxicity';
+$('#pj').innerHTML=R+30>=Vm?'+30 mg would exceed Vmax: level rises without limit!':`Add just <b>30 mg</b>: level goes <b>${c.toFixed(1)} → ${c2.toFixed(1)} mg/L</b> (×${(c2/Math.max(c,.01)).toFixed(1)}) while dose rose only ×${((R+30)/Math.max(R,1)).toFixed(2)}.`}
+$('#pd').oninput=up3;up3();
+/* ---------- Levodopa ---------- */
+const ka=2.5,ke=.7,tp=Math.log(ka/ke)/(ka-ke),nm=1/(ka/(ka-ke)*(Math.exp(-ke*tp)-Math.exp(-ka*tp))),X4=t=>50+t*26.25,Y4=l=>320-l*150;
+let LS=0,IV=4,tt=0;const lc=t=>{let c=0;for(let k=-12;k*IV<=t;k++){const u=t-k*IV;if(u>=0)c+=nm*ka/(ka-ke)*(Math.exp(-ke*u)-Math.exp(-ka*u))}return c};
+const lo=()=>.08+.05*LS,hi=()=>1.7-.08*LS,state=c=>c<lo()?['OFF','var(--r)']:c>hi()?['DYSKINESIA','var(--am)']:['ON','var(--g)'];
+function rl(){let pt='',n=[0,0,0],tk='';for(let t=0;t<=24;t+=.1){const c=lc(t);pt+=X4(t)+','+Y4(c)+' ';n[c<lo()?0:c>hi()?2:1]++}
+for(let k=0;k*IV<24;k++)tk+=`<line x1="${X4(k*IV)}" x2="${X4(k*IV)}" y1="20" y2="320" stroke="${V('--b')}" stroke-dasharray="3 5" opacity=".6"/><text x="${X4(k*IV)}" y="34" text-anchor="middle" style="font-size:14px">💊</text>`;
+let xt='';for(let t=0;t<=24;t+=4)xt+=`<text x="${X4(t)}" y="336" class="tk" text-anchor="middle">${t}h</text>`;
+$('#lvs').innerHTML=`<rect x="50" y="${Y4(lo())}" width="630" height="${320-Y4(lo())}" fill="${V('--r')}" opacity=".15"/><rect x="50" y="${Y4(hi())}" width="630" height="${Y4(lo())-Y4(hi())}" fill="${V('--g')}" opacity=".15"/><rect x="50" y="20" width="630" height="${Y4(hi())-20}" fill="${V('--am')}" opacity=".15"/><text x="676" y="${Y4(lo()/2)}" class="tt" text-anchor="end">OFF</text><text x="676" y="${(Y4(hi())+Y4(lo()))/2+4}" class="tt" text-anchor="end">ON window</text><text x="676" y="${Y4(hi())-6}" class="tt" text-anchor="end">Dyskinesia</text>`+axes('Brain levodopa (relative)','Hours (💊 = dose)',4,2,Y4)+xt+tk+`<polyline points="${pt}" fill="none" stroke="${V('--a')}" stroke-width="4" stroke-linecap="round"/><line id="lcu" y1="20" y2="320" stroke="${V('--tx')}"/><circle id="ldo" r="8" fill="${V('--tx')}"/>`;
+const T=n.reduce((a,b)=>a+b);[$('#off'),$('#on'),$('#dy')].forEach((e,i)=>e.textContent=Math.round(n[i]/T*100)+'%');$('#lsv').textContent=LS}
+$('#ls').oninput=e=>{LS=+e.target.value;rl()};$('#li').onchange=e=>{IV=+e.target.value;rl()};rl();
+let l0=performance.now();(function lp(n){const dt=(n-l0)/1000;l0=n;if(!$('#s4').hidden){tt=(tt+dt*1.5)%24;const c=lc(tt),s=state(c);$('#lcu').setAttribute('x1',X4(tt));$('#lcu').setAttribute('x2',X4(tt));$('#ldo').setAttribute('cx',X4(tt));$('#ldo').setAttribute('cy',Y4(c));$('#lst').textContent=s[0];$('#lst').style.background=s[1]}requestAnimationFrame(lp)})(l0);
+document.querySelector('[data-t=s5]').addEventListener('click',()=>{if(window.__t3)return;window.__t3=1;const q=document.createElement('script');q.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';q.onload=init3;document.body.appendChild(q)});function init3(){const w=$('#tw');if(!window.THREE){w.innerHTML='<p style="padding:20px;color:#fff">3D is not supported on this device.</p>';return}const T=THREE;let rd;try{rd=new T.WebGLRenderer({antialias:true,alpha:true})}catch(e){w.innerHTML='<p style="padding:20px;color:#fff">3D is not supported on this device.</p>';return}const sc=new T.Scene(),cam=new T.PerspectiveCamera(40,16/11,.1,100);cam.position.set(0,1.5,9);cam.lookAt(0,.2,0);rd.setPixelRatio(Math.min(devicePixelRatio||1,2));w.appendChild(rd.domElement);const c=rd.domElement;c.style.display='block';c.style.touchAction='none';sc.add(new T.AmbientLight(0xffffff,.75));const dl=new T.DirectionalLight(0xffffff,.9);dl.position.set(4,6,5);sc.add(dl);const G=new T.Group();sc.add(G);const mat=(k,o)=>new T.MeshStandardMaterial({color:k,roughness:.4,metalness:.1,transparent:o<1,opacity:o,depthWrite:o>=1});const col=[0x94a3b8,0x14b8a6,0x8b5cf6,0x14b8a6,0x8b5cf6],A=72*Math.PI/180;for(let i=0;i<5;i++){const cx=Math.cos(i*A),cz=Math.sin(i*A),e=new T.Mesh(new T.CylinderGeometry(.52,.52,1.5,28),mat(col[i],1));e.position.set(cx*1.1,1.05,cz*1.1);G.add(e);const m=new T.Mesh(new T.CylinderGeometry(.4,.4,1.5,28),mat(col[i],1));m.position.set(cx*.95,-.5,cz*.95);G.add(m)}const mem=new T.Mesh(new T.CylinderGeometry(3.4,3.4,1.6,48),mat(0xf59e0b,.28));mem.position.y=-.5;G.add(mem);const gate=new T.Mesh(new T.CylinderGeometry(.55,.55,.12,24),mat(0x475569,1));gate.position.y=-.5;G.add(gate);const grp=(geo,k,pts)=>{const g=new T.Group();pts.forEach(p=>{const s=new T.Mesh(geo,mat(k,1));s.position.set(Math.cos(p[0])*p[1],p[2],Math.sin(p[0])*p[1]);g.add(s)});G.add(g);return g};const gG=grp(new T.SphereGeometry(.2,16,16),0xfacc15,[[1.5*A,1.6,1.5],[3.5*A,1.6,1.5]]),gB=grp(new T.OctahedronGeometry(.25),0x60a5fa,[[4.5*A,1.6,1.5]]),gR=grp(new T.DodecahedronGeometry(.22),0xfb923c,[[A,1.4,-.5],[3*A,1.4,-.5]]);const ions=[];for(let i=0;i<8;i++){const s=new T.Mesh(new T.SphereGeometry(.13,12,12),mat(0x4ade80,1));G.add(s);ions.push({s,p:i/8,a:i*2.4})}let rx=.35,ry=0,tx=.35,auto=true,drag=0,px=0,py=0,lw=0,t0=performance.now();const rs=()=>{const W=w.clientWidth;if(!W)return;lw=W;rd.setSize(W,W*11/16);cam.aspect=16/11;cam.updateProjectionMatrix()};c.onpointerdown=e=>{drag=1;px=e.clientX;py=e.clientY;auto=false;$('#vauto').classList.remove('on');c.setPointerCapture(e.pointerId)};c.onpointermove=e=>{if(!drag)return;ry+=(e.clientX-px)*.012;rx=Math.max(-1.6,Math.min(1.6,rx+(e.clientY-py)*.012));tx=rx;px=e.clientX;py=e.clientY};c.onpointerup=()=>drag=0;$('#vtop').onclick=()=>tx=1.5;$('#vside').onclick=()=>tx=0;$('#vauto').onclick=e=>{auto=!auto;e.target.classList.toggle('on',auto)};(function f(n){const dt=Math.min(.05,(n-t0)/1000);t0=n;if(!$('#s5').hidden){if(w.clientWidth!=lw)rs();if(auto)ry+=dt*.5;if(!drag)rx+=(tx-rx)*.1;G.rotation.set(rx,ry,0);const o=$('#t3o').checked;gate.visible=!o;gG.visible=$('#t3g').checked;gB.visible=$('#t3b').checked;gR.visible=$('#t3r').checked;ions.forEach(q=>{q.p=(q.p+dt*.35)%1;if(o){q.s.position.set(Math.cos(q.a)*.12,3.2-q.p*6.4,Math.sin(q.a)*.12)}else{q.a+=dt*2;q.s.position.set(Math.cos(q.a)*.25,2.3+.5*Math.sin(q.p*6.28),Math.sin(q.a)*.25)}});rd.render(sc,cam)}requestAnimationFrame(f)})(t0)}
+</script></body></html>
